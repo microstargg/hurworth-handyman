@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Hurworth Handyman
 
-## Getting Started
+A simple single-page website for Hurworth Handyman — handyman repairs, rental property upkeep, and renovation project management.
 
-First, run the development server:
+## Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Next.js** (App Router) + TypeScript + Tailwind CSS
+- **Neon Postgres** for contact form submissions
+- **Vercel** for hosting
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Local development
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Install dependencies:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+   ```bash
+   npm install
+   ```
 
-## Learn More
+2. Copy the environment template and add your Neon connection string:
 
-To learn more about Next.js, take a look at the following resources:
+   ```bash
+   cp .env.example .env.local
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   Set `DATABASE_URL` to your Neon Postgres connection string.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3. Run the database migration in the [Neon SQL editor](https://console.neon.tech) or via the Neon CLI:
 
-## Deploy on Vercel
+   ```sql
+   -- See db/migrations/001_contact_enquiries.sql
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4. Start the dev server:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   ```bash
+   npm run dev
+   ```
+
+   Open [http://localhost:3000](http://localhost:3000).
+
+## Contact form
+
+Submissions are stored in the `contact_enquiries` table in Neon. View them in the Neon dashboard (SQL editor or table browser). No email, phone, or address is shown on the public site.
+
+## Deploy to Vercel
+
+1. Push this repo to GitHub.
+2. Import the project in [Vercel](https://vercel.com/new).
+3. Install the **Neon** integration from the Vercel Marketplace — it auto-provisions `DATABASE_URL`.
+4. Run the migration SQL against your production Neon database.
+5. Deploy.
+
+## Environment variables
+
+| Variable       | Description                          |
+| -------------- | ------------------------------------ |
+| `DATABASE_URL` | Neon Postgres connection string (server-only) |
