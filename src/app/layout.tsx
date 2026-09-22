@@ -1,10 +1,16 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { Source_Sans_3, Zilla_Slab } from "next/font/google";
 import "./globals.css";
 
-const plusJakarta = Plus_Jakarta_Sans({
+const sourceSans = Source_Sans_3({
   variable: "--font-sans",
   subsets: ["latin"],
+});
+
+const zillaSlab = Zilla_Slab({
+  variable: "--font-display",
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -29,8 +35,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en-GB" className={`${plusJakarta.variable} h-full scroll-smooth`}>
-      <body className="min-h-full bg-slate-950 font-sans text-slate-100 antialiased">
+    <html
+      lang="en-GB"
+      className={`${sourceSans.variable} ${zillaSlab.variable} h-full scroll-smooth`}
+    >
+      <body className="min-h-full bg-bg font-sans text-ink antialiased">
         {children}
       </body>
     </html>

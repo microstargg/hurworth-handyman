@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -10,17 +11,72 @@ import {
 
 type FormStatus = "idle" | "loading" | "success" | "error";
 
+function Reveal({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.classList.add("is-visible");
+          observer.unobserve(el);
+        }
+      },
+      { threshold: 0.15, rootMargin: "0px 0px -40px 0px" },
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div ref={ref} className={`reveal ${className}`}>
+      {children}
+    </div>
+  );
+}
+
 export function Header() {
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-800/60 bg-slate-950/90 backdrop-blur-md">
-      <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-        <a href="#" className="text-lg font-semibold tracking-tight text-white">
+    <header className="sticky top-0 z-50 border-b border-line/80 bg-surface/90 backdrop-blur-md">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-4">
+        <a
+          href="#"
+          className="font-display text-xl font-semibold tracking-tight text-ink sm:text-2xl"
+        >
           Hurworth Handyman
         </a>
-        <nav>
+        <nav className="flex items-center gap-5 sm:gap-8">
+          <a
+            href="#services"
+            className="hidden text-sm font-medium text-muted transition-colors hover:text-ink sm:inline"
+          >
+            Services
+          </a>
+          <a
+            href="#work"
+            className="hidden text-sm font-medium text-muted transition-colors hover:text-ink sm:inline"
+          >
+            Work
+          </a>
+          <a
+            href="#about"
+            className="hidden text-sm font-medium text-muted transition-colors hover:text-ink sm:inline"
+          >
+            About
+          </a>
           <a
             href="#contact"
-            className="rounded-lg bg-amber-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-amber-500"
+            className="inline-flex items-center rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-accent-ink shadow-sm transition-all hover:-translate-y-0.5 hover:bg-accent-hover hover:shadow-md"
           >
             Get in touch
           </a>
@@ -32,32 +88,62 @@ export function Header() {
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden border-b border-slate-800/60 px-6 py-20 sm:py-28">
+    <section className="relative overflow-hidden border-b border-line">
       <div
-        className="pointer-events-none absolute inset-0 opacity-30"
+        className="absolute inset-0"
         aria-hidden="true"
         style={{
-          backgroundImage:
-            "radial-gradient(circle at 20% 50%, rgba(217,119,6,0.15) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(148,163,184,0.1) 0%, transparent 40%)",
+          background:
+            "linear-gradient(165deg, #d8e8f2 0%, #eef3f0 42%, #e4ece7 100%)",
         }}
       />
-      <div className="relative mx-auto max-w-5xl">
-        <p className="mb-4 text-sm font-medium uppercase tracking-widest text-amber-500">
-          Hurworth &amp; surrounding areas
-        </p>
-        <h1 className="max-w-2xl text-4xl font-bold leading-tight tracking-tight text-white sm:text-5xl">
-          Reliable handyman work and renovation project management
-        </h1>
-        <p className="mt-6 max-w-xl text-lg leading-relaxed text-slate-300">
-          From day-to-day repairs on rental properties to full refurbishment
-          projects — practical, dependable work you can count on.
-        </p>
-        <a
-          href="#contact"
-          className="mt-10 inline-flex items-center rounded-lg bg-amber-600 px-6 py-3 text-base font-medium text-white transition-colors hover:bg-amber-500"
-        >
-          Send a message
-        </a>
+      <div
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-bg-soft/80 to-transparent"
+        aria-hidden="true"
+      />
+
+      <div className="relative mx-auto grid min-h-[calc(100svh-4.5rem)] max-w-6xl grid-cols-1 items-end gap-2 px-6 pt-12 sm:items-center sm:gap-8 sm:py-16 lg:grid-cols-2 lg:items-end lg:gap-8 lg:py-10">
+        <div className="relative z-10 order-1 max-w-xl pb-2 sm:pb-0 lg:self-center lg:pb-12">
+          <p className="animate-fade-up font-display text-4xl font-bold leading-[1.05] tracking-tight text-ink sm:text-5xl lg:text-[3.5rem] xl:text-6xl">
+            Hurworth Handyman
+          </p>
+          <h1 className="animate-fade-up animate-delay-1 mt-5 text-xl font-medium leading-snug text-ink/90 sm:text-2xl">
+            Reliable repairs and renovation project management, close to home.
+          </h1>
+          <p className="animate-fade-up animate-delay-2 mt-4 max-w-md text-base leading-relaxed text-muted sm:text-lg">
+            Day-to-day fixes, rental upkeep, and full refurbs for landlords and
+            homeowners in Hurworth and the surrounding area.
+          </p>
+          <div className="animate-fade-up animate-delay-3 mt-8 flex flex-wrap items-center gap-4">
+            <a
+              href="#contact"
+              className="inline-flex items-center rounded-lg bg-accent px-6 py-3 text-base font-semibold text-accent-ink shadow-sm transition-all hover:-translate-y-0.5 hover:bg-accent-hover hover:shadow-md"
+            >
+              Send a message
+            </a>
+            <a
+              href="#services"
+              className="text-sm font-semibold text-green underline-offset-4 transition-colors hover:text-ink hover:underline"
+            >
+              See how I can help
+            </a>
+          </div>
+        </div>
+
+        <div className="animate-fade-in relative order-2 -mx-6 flex items-end justify-center sm:mx-0 lg:-mr-6 lg:justify-end xl:-mr-10">
+          <div
+            className="pointer-events-none absolute bottom-[8%] left-1/2 h-[70%] w-[90%] -translate-x-1/2 rounded-[50%] bg-sky/55 blur-3xl"
+            aria-hidden="true"
+          />
+          <Image
+            src="/images/character/portrait-hammer.png"
+            alt="Friendly cartoon handyman holding a hammer"
+            width={618}
+            height={968}
+            priority
+            className="relative z-10 h-auto max-h-[min(52vh,560px)] w-auto max-w-full object-contain object-bottom drop-shadow-xl sm:max-h-[min(60vh,640px)] lg:max-h-[min(78vh,720px)] lg:w-full"
+          />
+        </div>
       </div>
     </section>
   );
@@ -68,55 +154,74 @@ const services = [
     title: "Handyman repairs & maintenance",
     description:
       "Odd jobs, fixes, and fittings around the home — or repairs between tenancies. If something needs doing, I can help get it sorted.",
-    icon: (
-      <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" aria-hidden="true">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437 1.745-1.437Zm6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008Z" />
-      </svg>
-    ),
+    image: "/images/character/fence-hammering.png",
+    imageAlt: "Handyman cartoon fixing a wooden fence",
   },
   {
     title: "Rental property upkeep",
     description:
       "Ongoing maintenance and responsive call-outs for landlords — keeping your properties in good condition and your tenants looked after.",
-    icon: (
-      <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" aria-hidden="true">
-        <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
-      </svg>
-    ),
+    image: "/images/character/arms-crossed.png",
+    imageAlt: "Handyman cartoon ready for property call-outs",
   },
   {
     title: "Renovation project management",
     description:
       "Planning a refurb? I coordinate trades, timelines, and quality from start to finish — so your renovation stays on track and gets done properly.",
-    icon: (
-      <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" aria-hidden="true">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z" />
-      </svg>
-    ),
+    image: "/images/character/drill-wood.png",
+    imageAlt: "Handyman cartoon drilling into timber",
   },
 ];
 
 export function Services() {
   return (
-    <section id="services" className="border-b border-slate-800/60 px-6 py-20">
-      <div className="mx-auto max-w-5xl">
-        <h2 className="text-3xl font-bold tracking-tight text-white">How I can help</h2>
-        <p className="mt-3 max-w-2xl text-slate-400">
-          Handyman and project management services for landlords and homeowners in Hurworth and the surrounding area.
-        </p>
-        <ul className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {services.map((service) => (
-            <li
-              key={service.title}
-              className="rounded-xl border border-slate-800 bg-slate-900/50 p-6"
-            >
-              <div className="mb-4 inline-flex rounded-lg bg-amber-600/10 p-3 text-amber-500">
-                {service.icon}
-              </div>
-              <h3 className="text-lg font-semibold text-white">{service.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-slate-400">
-                {service.description}
-              </p>
+    <section id="services" className="border-b border-line bg-surface px-6 py-20 sm:py-24">
+      <div className="mx-auto max-w-6xl">
+        <Reveal>
+          <h2 className="font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+            How I can help
+          </h2>
+          <p className="mt-3 max-w-2xl text-lg text-muted">
+            Handyman and project management services for landlords and
+            homeowners in Hurworth and the surrounding area.
+          </p>
+        </Reveal>
+
+        <ul className="mt-14 space-y-16 sm:space-y-20">
+          {services.map((service, index) => (
+            <li key={service.title}>
+              <Reveal>
+                <div
+                  className={`grid items-center gap-8 lg:grid-cols-2 lg:gap-14 ${
+                    index % 2 === 1 ? "lg:[&>*:first-child]:order-2" : ""
+                  }`}
+                >
+                  <div className="relative mx-auto w-full max-w-xs sm:max-w-sm">
+                    <div
+                      className="absolute inset-8 rounded-full bg-bg-soft/80"
+                      aria-hidden="true"
+                    />
+                    <Image
+                      src={service.image}
+                      alt={service.imageAlt}
+                      width={618}
+                      height={968}
+                      className="relative h-auto w-full object-contain"
+                    />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold uppercase tracking-wider text-wood">
+                      0{index + 1}
+                    </p>
+                    <h3 className="mt-2 font-display text-2xl font-semibold text-ink sm:text-3xl">
+                      {service.title}
+                    </h3>
+                    <p className="mt-4 max-w-md text-base leading-relaxed text-muted sm:text-lg">
+                      {service.description}
+                    </p>
+                  </div>
+                </div>
+              </Reveal>
             </li>
           ))}
         </ul>
@@ -125,24 +230,104 @@ export function Services() {
   );
 }
 
+const workItems = [
+  {
+    src: "/images/work/fence-install.jpg",
+    label: "Fence install",
+  },
+  {
+    src: "/images/work/repairs.jpg",
+    label: "Repairs",
+  },
+  {
+    src: "/images/work/renovation.jpg",
+    label: "Renovation",
+  },
+];
+
+export function WorkStrip() {
+  return (
+    <section id="work" className="border-b border-line bg-bg px-6 py-20 sm:py-24">
+      <div className="mx-auto max-w-6xl">
+        <Reveal>
+          <h2 className="font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+            Recent work
+          </h2>
+          <p className="mt-3 max-w-2xl text-lg text-muted">
+            A snapshot of jobs around Hurworth — fences, repairs, and
+            refurbishment work for local landlords and homeowners.
+          </p>
+        </Reveal>
+
+        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {workItems.map((item) => (
+            <Reveal key={item.src}>
+              <figure>
+                <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-bg-soft">
+                  <Image
+                    src={item.src}
+                    alt={item.label}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover"
+                  />
+                </div>
+                <figcaption className="mt-3">
+                  <p className="font-display text-lg font-semibold text-ink">
+                    {item.label}
+                  </p>
+                </figcaption>
+              </figure>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export function About() {
   return (
-    <section className="border-b border-slate-800/60 px-6 py-20">
-      <div className="mx-auto max-w-5xl">
-        <h2 className="text-3xl font-bold tracking-tight text-white">
-          Straightforward, dependable work
-        </h2>
-        <div className="mt-6 max-w-2xl space-y-4 text-slate-300 leading-relaxed">
-          <p>
-            I work with landlords and homeowners across Hurworth and the surrounding
-            area — from quick repairs between tenancies to managing full renovation
-            projects.
-          </p>
-          <p>
-            If you need a reliable hand with something around the house or a property
-            you let out, get in touch and I&apos;ll come back to you.
-          </p>
-        </div>
+    <section id="about" className="border-b border-line bg-surface px-6 py-20 sm:py-24">
+      <div className="mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
+        <Reveal>
+          <div className="relative mx-auto max-w-xs sm:max-w-sm">
+            <div
+              className="absolute inset-4 rounded-[2rem] bg-bg-soft/70"
+              aria-hidden="true"
+            />
+            <Image
+              src="/images/character/arms-crossed.png"
+              alt="Handyman cartoon standing confidently with arms crossed"
+              width={618}
+              height={968}
+              className="relative h-auto w-full object-contain"
+            />
+          </div>
+        </Reveal>
+
+        <Reveal>
+          <h2 className="font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+            Straightforward, dependable work
+          </h2>
+          <div className="mt-6 max-w-xl space-y-4 text-base leading-relaxed text-muted sm:text-lg">
+            <p>
+              I work with landlords and homeowners across Hurworth and the
+              surrounding area — from quick repairs between tenancies to
+              managing full renovation projects.
+            </p>
+            <p>
+              If you need a reliable hand with something around the house or a
+              property you let out, get in touch and I&apos;ll come back to you.
+            </p>
+          </div>
+          <a
+            href="#contact"
+            className="mt-8 inline-flex items-center rounded-lg bg-accent px-6 py-3 text-base font-semibold text-accent-ink shadow-sm transition-all hover:-translate-y-0.5 hover:bg-accent-hover hover:shadow-md"
+          >
+            Ask about a job
+          </a>
+        </Reveal>
       </div>
     </section>
   );
@@ -181,17 +366,23 @@ export function ContactForm() {
     }
   }
 
+  const fieldClass =
+    "mt-1.5 w-full rounded-lg border border-line bg-surface px-4 py-3 text-ink placeholder:text-muted/60 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30";
+
   if (status === "success") {
     return (
-      <div className="rounded-xl border border-emerald-800/60 bg-emerald-950/30 p-8 text-center">
-        <p className="text-lg font-medium text-emerald-400">Thanks — I&apos;ll be in touch.</p>
-        <p className="mt-2 text-sm text-slate-400">
-          Your message has been received. I&apos;ll get back to you as soon as I can.
+      <div className="rounded-xl border border-green/30 bg-green/5 p-8 text-center">
+        <p className="text-lg font-medium text-green">
+          Thanks — I&apos;ll be in touch.
+        </p>
+        <p className="mt-2 text-sm text-muted">
+          Your message has been received. I&apos;ll get back to you as soon as I
+          can.
         </p>
         <button
           type="button"
           onClick={() => setStatus("idle")}
-          className="mt-6 text-sm font-medium text-amber-500 hover:text-amber-400"
+          className="mt-6 text-sm font-semibold text-wood hover:text-ink"
         >
           Send another message
         </button>
@@ -202,82 +393,82 @@ export function ContactForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
       <div>
-        <label htmlFor="name" className="block text-sm font-medium text-slate-300">
-          Name <span className="text-amber-500">*</span>
+        <label htmlFor="name" className="block text-sm font-medium text-ink">
+          Name <span className="text-accent">*</span>
         </label>
         <input
           id="name"
           type="text"
           autoComplete="name"
-          className="mt-1.5 w-full rounded-lg border border-slate-700 bg-slate-900 px-4 py-3 text-white placeholder:text-slate-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
+          className={fieldClass}
           placeholder="Your name"
           {...register("name")}
         />
         {errors.name && (
-          <p className="mt-1.5 text-sm text-red-400" role="alert">
+          <p className="mt-1.5 text-sm text-red-600" role="alert">
             {errors.name.message}
           </p>
         )}
       </div>
 
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-slate-300">
-          Email <span className="text-amber-500">*</span>
+        <label htmlFor="email" className="block text-sm font-medium text-ink">
+          Email <span className="text-accent">*</span>
         </label>
         <input
           id="email"
           type="email"
           autoComplete="email"
-          className="mt-1.5 w-full rounded-lg border border-slate-700 bg-slate-900 px-4 py-3 text-white placeholder:text-slate-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
+          className={fieldClass}
           placeholder="you@example.com"
           {...register("email")}
         />
         {errors.email && (
-          <p className="mt-1.5 text-sm text-red-400" role="alert">
+          <p className="mt-1.5 text-sm text-red-600" role="alert">
             {errors.email.message}
           </p>
         )}
       </div>
 
       <div>
-        <label htmlFor="phone" className="block text-sm font-medium text-slate-300">
-          Phone <span className="text-slate-500">(optional)</span>
+        <label htmlFor="phone" className="block text-sm font-medium text-ink">
+          Phone <span className="text-muted">(optional)</span>
         </label>
         <input
           id="phone"
           type="tel"
           autoComplete="tel"
-          className="mt-1.5 w-full rounded-lg border border-slate-700 bg-slate-900 px-4 py-3 text-white placeholder:text-slate-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
+          className={fieldClass}
           placeholder="Your phone number"
           {...register("phone")}
         />
         {errors.phone && (
-          <p className="mt-1.5 text-sm text-red-400" role="alert">
+          <p className="mt-1.5 text-sm text-red-600" role="alert">
             {errors.phone.message}
           </p>
         )}
       </div>
 
       <div>
-        <label htmlFor="message" className="block text-sm font-medium text-slate-300">
-          Message <span className="text-amber-500">*</span>
+        <label htmlFor="message" className="block text-sm font-medium text-ink">
+          Message <span className="text-accent">*</span>
         </label>
         <textarea
           id="message"
           rows={5}
-          className="mt-1.5 w-full resize-y rounded-lg border border-slate-700 bg-slate-900 px-4 py-3 text-white placeholder:text-slate-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
+          className={`${fieldClass} resize-y`}
           placeholder="Tell me about the job..."
           {...register("message")}
         />
         {errors.message && (
-          <p className="mt-1.5 text-sm text-red-400" role="alert">
+          <p className="mt-1.5 text-sm text-red-600" role="alert">
             {errors.message.message}
           </p>
         )}
       </div>
 
       {status === "error" && (
-        <p className="text-sm text-red-400" role="alert">
+        <p className="text-sm text-red-600" role="alert">
           Something went wrong. Please try again in a moment.
         </p>
       )}
@@ -285,7 +476,7 @@ export function ContactForm() {
       <button
         type="submit"
         disabled={status === "loading"}
-        className="w-full rounded-lg bg-amber-600 px-6 py-3 text-base font-medium text-white transition-colors hover:bg-amber-500 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+        className="w-full rounded-lg bg-accent px-6 py-3 text-base font-semibold text-accent-ink shadow-sm transition-all hover:-translate-y-0.5 hover:bg-accent-hover hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0 sm:w-auto"
       >
         {status === "loading" ? "Sending..." : "Send message"}
       </button>
@@ -295,18 +486,33 @@ export function ContactForm() {
 
 export function ContactSection() {
   return (
-    <section id="contact" className="px-6 py-20">
-      <div className="mx-auto max-w-5xl">
-        <div className="max-w-xl">
-          <h2 className="text-3xl font-bold tracking-tight text-white">Get in touch</h2>
-          <p className="mt-3 text-slate-400">
-            Drop me a message and I&apos;ll get back to you. No obligation — just
-            tell me what you need help with.
+    <section id="contact" className="bg-bg px-6 py-20 sm:py-24">
+      <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[1fr_1.1fr] lg:items-start lg:gap-16">
+        <Reveal>
+          <div className="relative mx-auto max-w-[220px] lg:mx-0 lg:max-w-[260px]">
+            <Image
+              src="/images/character/lawn-mowing.png"
+              alt="Handyman cartoon outdoors"
+              width={618}
+              height={968}
+              className="h-auto w-full object-contain"
+            />
+          </div>
+          <h2 className="mt-6 font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+            Get in touch
+          </h2>
+          <p className="mt-3 max-w-md text-lg text-muted">
+            Drop me a message and I&apos;ll get back to you. No obligation —
+            just tell me what you need help with.
           </p>
-        </div>
-        <div className="mt-10 max-w-xl">
+          <p className="mt-6 text-sm font-semibold uppercase tracking-wider text-wood">
+            Hurworth &amp; surrounding areas
+          </p>
+        </Reveal>
+
+        <Reveal>
           <ContactForm />
-        </div>
+        </Reveal>
       </div>
     </section>
   );
@@ -315,9 +521,14 @@ export function ContactSection() {
 export function Footer() {
   const year = new Date().getFullYear();
   return (
-    <footer className="border-t border-slate-800/60 px-6 py-8">
-      <div className="mx-auto max-w-5xl text-center text-sm text-slate-500">
-        <p>&copy; {year} Hurworth Handyman. All rights reserved.</p>
+    <footer className="border-t border-line bg-surface px-6 py-10">
+      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 text-center sm:flex-row sm:text-left">
+        <p className="font-display text-lg font-semibold text-ink">
+          Hurworth Handyman
+        </p>
+        <p className="text-sm text-muted">
+          &copy; {year} Hurworth Handyman. All rights reserved.
+        </p>
       </div>
     </footer>
   );

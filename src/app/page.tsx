@@ -5,6 +5,7 @@ import {
   Header,
   Hero,
   Services,
+  WorkStrip,
 } from "@/components/site";
 
 export default function Home() {
@@ -14,6 +15,7 @@ export default function Home() {
       <main>
         <Hero />
         <Services />
+        <WorkStrip />
         <About />
         <ContactSection />
       </main>
