@@ -40,7 +40,9 @@ A simple single-page website for Hurworth Handyman — handyman repairs, rental 
 
 ## Contact form
 
-Submissions are stored in the `contact_enquiries` table in Neon. View them in the Neon dashboard (SQL editor or table browser). No email, phone, or address is shown on the public site.
+Submissions are stored in the `contact_enquiries` table in Neon. View them in the Neon dashboard (SQL editor or table browser).
+
+Each submission is also emailed to `CONTACT_EMAIL_TO` (default `ben@hurworthhandyman.com`) via [Resend](https://resend.com), with Reply-To set to the customer so you can answer straight from your inbox. The sending domain in `CONTACT_EMAIL_FROM` must be verified in Resend. If email isn't configured or fails, the enquiry is still saved. No email, phone, or address is shown on the public site.
 
 ## Deploy to Vercel
 
@@ -55,3 +57,6 @@ Submissions are stored in the `contact_enquiries` table in Neon. View them in th
 | Variable       | Description                          |
 | -------------- | ------------------------------------ |
 | `DATABASE_URL` | Neon Postgres connection string (server-only) |
+| `RESEND_API_KEY` | Resend API key (server-only) |
+| `CONTACT_EMAIL_FROM` | Sender, e.g. `Hurworth Handyman Website <enquiries@hurworthhandyman.com>` — domain must be verified in Resend |
+| `CONTACT_EMAIL_TO` | Optional recipient, defaults to `ben@hurworthhandyman.com` |

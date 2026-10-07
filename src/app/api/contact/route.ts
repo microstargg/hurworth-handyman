@@ -1,5 +1,6 @@
-import { NextResponse } from "next/server";
+import { after, NextResponse } from "next/server";
 import { getSql } from "@/lib/db";
+import { sendEnquiryNotification } from "@/lib/email";
 import { contactSchema } from "@/lib/validations/contact";
 
 export async function POST(request: Request) {
@@ -21,6 +22,9 @@ export async function POST(request: Request) {
       INSERT INTO contact_enquiries (name, email, phone, message)
       VALUES (${name}, ${email}, ${phone || null}, ${message})
     `;
+
+    // The enquiry is already saved, so a failed email must not fail the request.
+    after(() => sendEnquiryNotification(parsed.data));
 
     return NextResponse.json({ success: true }, { status: 201 });
   } catch (error) {
