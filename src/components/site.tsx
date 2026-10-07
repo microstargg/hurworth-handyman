@@ -238,16 +238,19 @@ export function Services() {
 
 const workItems = [
   {
-    src: "/images/work/fence-install.jpg",
+    src: "/images/work/hallway-bench.jpg",
+    label: "Hallway bench & panelling",
+    alt: "Built-in hallway bench with coat hooks, panelling and storage baskets",
+  },
+  {
+    src: "/images/work/garden-decking.jpg",
+    label: "Decking & planting",
+    alt: "Raised garden decking with balustrade, steps and a freshly planted bed",
+  },
+  {
+    src: "/images/work/garden-fence.jpg",
     label: "Fence install",
-  },
-  {
-    src: "/images/work/repairs.jpg",
-    label: "Repairs",
-  },
-  {
-    src: "/images/work/renovation.jpg",
-    label: "Renovation",
+    alt: "New horizontal timber fence around a back garden",
   },
 ];
 
@@ -269,10 +272,10 @@ export function WorkStrip() {
           {workItems.map((item) => (
             <Reveal key={item.src}>
               <figure>
-                <div className="relative aspect-[4/3] overflow-hidden rounded-xl bg-bg-soft">
+                <div className="relative aspect-square overflow-hidden rounded-xl bg-bg-soft">
                   <Image
                     src={item.src}
-                    alt={item.label}
+                    alt={item.alt}
                     fill
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     className="object-cover"
