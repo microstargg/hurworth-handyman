@@ -138,8 +138,8 @@ export function Hero() {
           <Image
             src="/images/character/portrait-hammer.png"
             alt="Friendly cartoon handyman holding a hammer"
-            width={618}
-            height={968}
+            width={1193}
+            height={1600}
             priority
             className="relative z-10 h-auto max-h-[min(52vh,560px)] w-auto max-w-full object-contain object-bottom drop-shadow-xl sm:max-h-[min(60vh,640px)] lg:max-h-[min(78vh,720px)] lg:w-full"
           />
@@ -155,6 +155,8 @@ const services = [
     description:
       "Odd jobs, fixes, and fittings around the home — or repairs between tenancies. If something needs doing, I can help get it sorted.",
     image: "/images/character/fence-hammering.png",
+    imageWidth: 878,
+    imageHeight: 1600,
     imageAlt: "Handyman cartoon fixing a wooden fence",
   },
   {
@@ -162,6 +164,8 @@ const services = [
     description:
       "Ongoing maintenance and responsive call-outs for landlords — keeping your properties in good condition and your tenants looked after.",
     image: "/images/character/arms-crossed.png",
+    imageWidth: 730,
+    imageHeight: 1600,
     imageAlt: "Handyman cartoon ready for property call-outs",
   },
   {
@@ -169,6 +173,8 @@ const services = [
     description:
       "Planning a refurb? I coordinate trades, timelines, and quality from start to finish — so your renovation stays on track and gets done properly.",
     image: "/images/character/drill-wood.png",
+    imageWidth: 1166,
+    imageHeight: 1600,
     imageAlt: "Handyman cartoon drilling into timber",
   },
 ];
@@ -204,8 +210,8 @@ export function Services() {
                     <Image
                       src={service.image}
                       alt={service.imageAlt}
-                      width={618}
-                      height={968}
+                      width={service.imageWidth}
+                      height={service.imageHeight}
                       className="relative h-auto w-full object-contain"
                     />
                   </div>
@@ -299,8 +305,8 @@ export function About() {
             <Image
               src="/images/character/arms-crossed.png"
               alt="Handyman cartoon standing confidently with arms crossed"
-              width={618}
-              height={968}
+              width={730}
+              height={1600}
               className="relative h-auto w-full object-contain"
             />
           </div>
@@ -493,8 +499,8 @@ export function ContactSection() {
             <Image
               src="/images/character/lawn-mowing.png"
               alt="Handyman cartoon outdoors"
-              width={618}
-              height={968}
+              width={1127}
+              height={1600}
               className="h-auto w-full object-contain"
             />
           </div>

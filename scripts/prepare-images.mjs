@@ -4,40 +4,9 @@ import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
-const collage = process.argv[2];
 const outDir = path.join(root, "public", "images");
 
-const W = 1024;
-const H = 1024;
-const cols = 3;
-const rows = 2;
-const cellW = Math.floor(W / cols);
-const cellH = Math.floor(H / rows);
-const insetY = 14;
-
-// Per-cell insets: outer edges need more trim to avoid white gutters /
-// neighbouring-panel bleed in the collage.
-const crops = [
-  ["portrait-hammer", 0, 0, 18, 28],
-  ["lawn-mowing", 1, 0, 22, 22],
-  ["fence-hammering", 2, 0, 78, 10],
-  ["drill-wood", 0, 1, 18, 28],
-  ["arms-crossed", 1, 1, 22, 22],
-  ["yard-raking", 2, 1, 72, 10],
-];
-
-for (const [name, col, row, insetL, insetR] of crops) {
-  const left = col * cellW + insetL;
-  const top = row * cellH + insetY;
-  const width = cellW - insetL - insetR;
-  const height = cellH - insetY * 2;
-  const dest = path.join(outDir, "character", `${name}.png`);
-  await sharp(collage)
-    .extract({ left, top, width, height })
-    .png()
-    .toFile(dest);
-  console.log("wrote", name, `${width}x${height}`);
-}
+// Character images are built by scripts/process-character-images.py.
 
 const placeholders = [
   {
